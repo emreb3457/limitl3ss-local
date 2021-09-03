@@ -10,6 +10,7 @@ exports.isAuthUser = catchAsyncErrors(async (req, res, next) => {
     const { token } = req.body
     console.log("token")
     console.log(token)
+    return next(new ErrorHandler('Login first to access this resource.', 401))
     if (!token) {
         return next(new ErrorHandler('Login first to access this resource.', 401))
     }
