@@ -1,7 +1,6 @@
 const ErrorHandler = require('../utils/errorHandler');
 
 module.exports = (err, req, res, next) => {
-   
     err.statusCode = err.statusCode || 500;
     if (process.env.NODE_ENV === 'DEVELOPMENT') {
         
@@ -12,8 +11,8 @@ module.exports = (err, req, res, next) => {
             stack: err.stack
         })
     }
-console.log(process.env.NODE_ENV)
-    if (process.env.NODE_ENV === 'production') {
+
+    if (process.env.NODE_ENV === 'PRODUCTION') {
         let error = { ...err }
 
         error.message = err.message;
