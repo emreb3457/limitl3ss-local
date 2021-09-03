@@ -1,6 +1,7 @@
 const ErrorHandler = require('../utils/errorHandler');
 
 module.exports = (err, req, res, next) => {
+    console.log("errora girdi")
     err.statusCode = err.statusCode || 500;
     if (process.env.NODE_ENV === 'DEVELOPMENT') {
         
@@ -35,7 +36,7 @@ module.exports = (err, req, res, next) => {
             error = new ErrorHandler(message, 400)
         }
 
-console.log("errora girdi")
+
         res.status(error.statusCode || 500).json({
             success: false,
             message: error.message || 'Internal Server Error'
