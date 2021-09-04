@@ -4,10 +4,10 @@ const app = express();
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
 const bodyParser = require('body-parser')
-
+const morgan = require("morgan")
 require('dotenv').config({ path: 'config/config.env' })
 const errorMiddleware = require('./middlewares/error')
-
+app.use(morgan("dev"))
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));

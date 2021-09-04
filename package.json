@@ -5,14 +5,13 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "SET NODE_ENV=DEVELOPMENT& nodemon server.js",
-    "prod": "SET NODE_ENV=PRODUCTION& nodemon server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "SET NODE_ENV=development& nodemon -q",
+    "dev:ubuntu": "NODE_ENV=development nodemon -q",
+    "prod:watch": "nodemon -q"
   },
   "author": "Emre",
   "license": "ISC",
   "devDependencies": {
-    "morgan": "^1.10.0",
     "nodemon": "^2.0.12"
   },
   "dependencies": {
@@ -27,6 +26,7 @@
     "mongoose": "^6.0.2",
     "nodemailer": "^6.6.3",
     "package.json": "^2.0.1",
-    "validator": "^13.6.0"
+    "validator": "^13.6.0",
+    "morgan": "^1.10.0"
   }
 }

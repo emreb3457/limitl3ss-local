@@ -5,9 +5,10 @@ const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
+const {CLIENT_URL} = require("../constants/appConstants");
 
 // Register a publisherUser   => /api/register/publisher
-exports.registerPublisherUser = catchAsyncErrors(async (req, res, next) => {
+exports.registerPublisherUser = catchAsyncErrors(async (req, res) => {
 
     const user = await publisherUser.create(req.body)
     sendToken(user, 200, res)
@@ -62,9 +63,8 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const resetToken = user.getResetPasswordToken();
 
     await user.save({ validateBeforeSave: false });
-
     // Create reset password url
-    const resetUrl = `${req.protocol}://${process.env.CLIENT_URL}/password/reset/${resetToken}`;
+    const resetUrl = `${req.protocol}://${CLIENT_URL}/password/reset/${resetToken}`;
 
     const message = `Your password reset token is as follow:\n\n${resetUrl}\n\n`
 
@@ -137,7 +137,7 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
 
 
 // Logout user   =>   /api/logout
-exports.logout = catchAsyncErrors(async (req, res, next) => {
+exports.logout = catchAsyncErrors(async (req, res) => {
     res.cookie('token', null, {
         expires: new Date(Date.now()),
         httpOnly: true
