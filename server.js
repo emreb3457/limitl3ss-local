@@ -9,15 +9,16 @@ process.on('uncaughtException', err => {
 })
 
 // Setting up config file
- require('dotenv').config({ path: 'config/config.env' })
+require('dotenv').config({ path: 'config/config.env' })
 
 
 // Connecting to database
 connectDatabase();
 
 const SERVER_PORT = process.env.port || process.env.PORT || 3001;
+var SERVER_HOST = process.env.your_host || '0.0.0.0';
 
-const server = app.listen(SERVER_PORT, () => {
+const server = app.listen(SERVER_PORT, SERVER_HOST, () => {
     console.log(`Server started on PORT: ${SERVER_PORT} in ${process.env.NODE_ENV} mode.`)
 })
 
