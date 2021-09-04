@@ -4,7 +4,7 @@
   "description": "limitl3ss network back-end",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js -p $PORT",
+    "start": "node server.js",
     "dev": "SET NODE_ENV=development& nodemon -q",
     "dev:ubuntu": "NODE_ENV=development nodemon -q",
     "prod:watch": "nodemon -q"
