@@ -16,9 +16,8 @@ require('dotenv').config({ path: 'config/config.env' })
 connectDatabase();
 
 const SERVER_PORT = process.env.port || process.env.PORT || 3001;
-var SERVER_HOST = process.env.your_host || '0.0.0.0';
 
-const server = app.listen(SERVER_PORT, SERVER_HOST, () => {
+const server = app.listen(SERVER_PORT, () => {
     console.log(`Server started on PORT: ${SERVER_PORT} in ${process.env.NODE_ENV} mode.`)
 })
 
