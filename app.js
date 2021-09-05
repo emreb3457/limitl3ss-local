@@ -21,6 +21,16 @@ const corsConfig = {
 };
 app.use(cors(corsConfig));
 
+// Cors politikaları gereği
+// Frontend üzerinde erişebileceğim header'ların adını
+// Burada belirtmek zorundayım.
+app.use((req, res, next) => {
+    res.header({
+        "Access-Control-Expose-Headers": 'Token'
+    });
+    next();
+});
+
 
 
 app.use(express.static(__dirname + '/public'));

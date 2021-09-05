@@ -9,7 +9,7 @@ process.on('uncaughtException', err => {
 })
 
 // Setting up config file
-require('dotenv').config({ path: 'config/config.env' })
+ require('dotenv').config({ path: 'config/config.env' })
 
 
 // Connecting to database

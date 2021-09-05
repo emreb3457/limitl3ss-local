@@ -16,7 +16,11 @@ exports.registerPublisherUser = catchAsyncErrors(async (req, res) => {
 
 // Register a advertiserUser   => /api/register/advertiser
 exports.registerAdvertiserUser = catchAsyncErrors(async (req, res, next) => {
-    
+    const {
+        password,
+        confirmPassword
+    } = req.body;
+
     if (password !== confirmPassword) {
         return next(new ErrorHandler('Passwords do not match', 400))
     }
