@@ -8,7 +8,7 @@ const catchAsyncErrors = require("./catchAsyncErrors");
 exports.isAuthUser = catchAsyncErrors(async (req, res, next) => {
 
     const { token } = req.body
-    
+
 
     if (!token) {
         return next(new ErrorHandler('Login first to access this resource.', 401))

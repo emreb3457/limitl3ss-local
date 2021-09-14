@@ -31,8 +31,14 @@ const productSchema = new mongoose.Schema({
         required: [true, 'Please enter product seller']
     },
     image: {
-        type: String,
-        required: true
+        url: {
+            type: String,
+            required: true
+        },
+        orjname: {
+            type: String,
+            required: true
+        }
     },
     user: {
         type: mongoose.Schema.ObjectId,

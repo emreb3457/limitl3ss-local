@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const companySchema=mongoose.Schema({
-    name: {
+const companySchema = mongoose.Schema({
+    companyname: {
         type: String,
-        required: [true, 'Please enter your name'],
+        required: [true, 'Please enter company name'],
         maxLength: [20, 'Your name cannot exceed 20 characters']
     },
     vatId: {
@@ -32,4 +32,4 @@ const companySchema=mongoose.Schema({
         required: true
     },
 })
-module.exports=mongoose.model("Company",companySchema)
+module.exports = mongoose.model("Company", companySchema)

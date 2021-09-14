@@ -1,16 +1,29 @@
 const publisherUser = require("../models/publisherUser")
 const advertiserUser = require("../models/advertiserUser")
+const Company = require("../models/company")
 const ErrorHandler = require("../utils/errorHandler")
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
 const sendToken = require('../utils/jwtToken');
 const sendEmail = require('../utils/sendMail');
 const crypto = require('crypto');
-const {CLIENT_URL} = require("../constants/appConstants");
+const { CLIENT_URL } = require("../constants/appConstants");
 
 // Register a publisherUser   => /api/register/publisher
-exports.registerPublisherUser = catchAsyncErrors(async (req, res) => {
+exports.registerPublisherUser = catchAsyncErrors(async (req, res, next) => {
+    const {
+        password,
+        confirmPassword
+    } = req.body;
 
-    const user = await publisherUser.create(req.body)
+    if (password !== confirmPassword) {
+        return next(new ErrorHandler('Passwords do not match', 400))
+    }
+
+    const user = new publisherUser(req.body)
+    req.body.user = user._id
+
+    await Company.create(req.body)
+    await user.save()
     sendToken(user, 200, res)
 })
 

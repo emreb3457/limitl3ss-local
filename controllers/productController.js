@@ -5,7 +5,16 @@ const catchAsyncErrors = require('../middlewares/catchAsyncErrors');
 
 // Create new product   =>   /api/admin/product/new
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
+    if (!req.file) {
+        next(new ErrorHandler("File upload failed", 501))
+    }
+    const newpath = req.file.path.slice(6)
+    let image = {
+        url: newpath,
+        orjname: req.file.originalname
 
+    }
+    req.body.image = image
     req.body.user = req.user.id;
     const product = await Product.create(req.body);
 

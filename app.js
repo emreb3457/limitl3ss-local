@@ -37,9 +37,10 @@ app.use(express.static(__dirname + '/public'));
 //All routes
 const user = require("./routes/userRoute")
 const product = require('./routes/productRoute')
+const news = require('./routes/newsAnnounRoute')
 app.use("/api", user)
 app.use("/api", product)
-
+app.use("/api", news)
 // Middleware to handle errors
 app.use(errorMiddleware);
 
