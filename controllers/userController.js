@@ -66,6 +66,53 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 })
 
+// Update user profile   =>   /api/me/update
+exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+
+    const updateuser = await User.findByIdAndUpdate(req.user.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true,
+        updateuser
+    })
+})
+
+// Update avatar profile   =>   /api/me/avatar
+exports.updateAvatar = catchAsyncErrors(async (req, res, next) => {
+    if (!req.file) {
+        next(new ErrorHandler("File upload failed", 501))
+    }
+    const newpath = req.file.path.slice(6)
+    const updateuser = await User.findByIdAndUpdate(req.user.id, { 'avatar.url': newpath }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true,
+        updateuser
+    })
+})
+
+// Update remove avatar profile   =>   /api/me/avatar
+exports.removeAvatar = catchAsyncErrors(async (req, res, next) => {
+    const updateuser = await User.findByIdAndUpdate(req.user.id, { 'avatar.url': "" }, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).json({
+        success: true,
+        updateuser
+    })
+})
+
 // Forgot Password   =>  /api/password/forgot
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
     const user = await advertiserUser.findOne({ email: req.body.email }) ?

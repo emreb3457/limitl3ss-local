@@ -8,7 +8,10 @@ const {
     loginUser,
     forgotPassword,
     resetPassword,
-    logout
+    logout,
+    updateAvatar,
+    removeAvatar,
+    updateProfile
 } = require("../controllers/userController");
 
 router.route('/register/publisher').post(registerPublisherUser);
@@ -21,6 +24,10 @@ router.route('/password/reset/:token').put(resetPassword)
 router.route('/logout').get(logout);
 
 router.route('/me').get(isAuthUser, getUser)
+router.route('/me/update').put(isAuthUser, updateProfile)
+router.route('/me/avatar')
+    .post(isAuthUser, updateAvatar)
+    .delete(isAuthUser, removeAvatar)
 
 
 module.exports = router

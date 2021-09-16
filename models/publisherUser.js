@@ -45,6 +45,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'publisher'
     },
+    avatar: {
+        url: {
+            type: String,
+        }
+    },
     //About You
     experience: {
         type: String,

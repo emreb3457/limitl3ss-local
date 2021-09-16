@@ -64,6 +64,11 @@ const userSchema = new mongoose.Schema({
         type: String,
         default: 'advertiser'
     },
+    avatar: {
+        url: {
+            type: String,
+        }
+    },
     createdAt: {
         type: Date,
         default: Date.now
