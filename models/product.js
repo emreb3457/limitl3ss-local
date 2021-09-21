@@ -30,6 +30,13 @@ const productSchema = new mongoose.Schema({
         type: String,
         required: [true, 'Please enter product seller']
     },
+    clicks: [
+        {
+            userId: {
+                type: mongoose.Schema.ObjectId,
+            }
+        }
+    ],
     image: {
         url: {
             type: String,

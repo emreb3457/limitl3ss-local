@@ -40,16 +40,24 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
 exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
 
     const product = await Product.findById(req.params.id);
-
     if (!product) {
         return next(new ErrorHandler('Product not found', 404));
     }
-
-    res.status(200).json({
-        success: true,
-        product
-    })
-
+    const user = await product.clicks.filter(usr => usr.userId == req.user._id.toString())
+    if (user.length > 0) {
+        res.status(200).json({
+            success: true,
+            product
+        })
+    }
+    else {
+        await product.clicks.push({ 'userId': req.user._id.toString() })
+        await product.save({ validateBeforeSave: false });
+        res.status(200).json({
+            success: true,
+            product
+        })
+    }
 })
 
 // Update Product   =>   /api/admin/product/:id
@@ -86,6 +94,28 @@ exports.deleteProduct = catchAsyncErrors(async (req, res, next) => {
     res.status(200).json({
         success: true,
         message: 'Product is deleted.'
+    })
+
+})
+
+// Recent Product& Recent Offers   =>   /api/recentoffers
+exports.recentOffers = catchAsyncErrors(async (req, res, next) => {
+
+    const product = await Product.find({}).sort({ createdAt: -1 }).limit(6);
+    res.status(200).json({
+        success: true,
+        product
+    })
+
+})
+
+// Best Offers Product& Best Offers   =>   /api/bestoffers
+exports.bestOffers = catchAsyncErrors(async (req, res, next) => {
+
+    const product = await Product.find({}).sort({ 'clicks': -1 }).limit(6);
+    res.status(200).json({
+        success: true,
+        product
     })
 
 })
