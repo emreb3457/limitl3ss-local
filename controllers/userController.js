@@ -14,7 +14,6 @@ exports.registerPublisherUser = catchAsyncErrors(async (req, res, next) => {
         password,
         confirmPassword
     } = req.body;
-    console.log(req.body)
     if (password !== confirmPassword) {
         return next(new ErrorHandler('Passwords do not match', 400))
     }
