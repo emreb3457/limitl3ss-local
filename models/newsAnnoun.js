@@ -4,7 +4,6 @@ const newsandannounSchema = mongoose.Schema({
     title: {
         type: String,
         required: [true, 'Please enter title'],
-        trim: true,
         maxLength: [100, 'Title cannot exceed 100 characters']
     },
     description: {

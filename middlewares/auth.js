@@ -1,5 +1,4 @@
-const publisherUser = require('../models/publisherUser')
-const advertiserUser = require('../models/advertiserUser')
+const Users = require('../models/users')
 const jwt = require("jsonwebtoken");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("./catchAsyncErrors");
@@ -15,9 +14,7 @@ exports.isAuthUser = catchAsyncErrors(async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.jwt_secret)
-    req.user = await advertiserUser.findById(decoded.id) ?
-        await advertiserUser.findById(decoded.id) :
-        await publisherUser.findById(decoded.id)
+    req.user = await Users.findById(decoded.id)
 
     next()
 })

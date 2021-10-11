@@ -38,9 +38,11 @@ app.use(express.static(__dirname + '/public'));
 const user = require("./routes/userRoute")
 const product = require('./routes/productRoute')
 const news = require('./routes/newsAnnounRoute')
+const gameawards = require('./routes/gameAwardsRoute')
 app.use("/api", user)
 app.use("/api", product)
 app.use("/api", news)
+app.use("/api", gameawards)
 // Middleware to handle errors
 app.use(errorMiddleware);
 

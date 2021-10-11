@@ -6,7 +6,7 @@ const companySchema = mongoose.Schema({
         required: [true, 'Please enter company name'],
         maxLength: [20, 'Your name cannot exceed 20 characters']
     },
-    vatId: {
+    vatID: {
         type: String,
     },
     instantMessage: {
@@ -15,20 +15,21 @@ const companySchema = mongoose.Schema({
     },
     website: {
         type: String,
-        required: [true, 'Please enter web site adress'],
     },
     sector: {
         type: String,
-        required: [true, 'Please enter your verticals'],
-        maxLength: [20, 'Your name cannot exceed 20 characters']
+        maxLength: [20, 'Your sector cannot exceed 20 characters']
     },
-    country: {
+    companyCountry: {
         type: String,
         required: [true, 'Please enter company country'],
     },
+    address: {
+        type: String
+    },
     user: {
         type: mongoose.Schema.ObjectId,
-        ref: 'publisherUser',
+        ref: 'Users',
         required: true
     },
 })

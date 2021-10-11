@@ -117,5 +117,4 @@ exports.bestOffers = catchAsyncErrors(async (req, res, next) => {
         success: true,
         product
     })
-
 })

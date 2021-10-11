@@ -1,5 +1,4 @@
-const publisherUser = require("../models/publisherUser")
-const advertiserUser = require("../models/advertiserUser")
+const Users = require("../models/users")
 const Company = require("../models/company")
 const ErrorHandler = require("../utils/errorHandler")
 const catchAsyncErrors = require("../middlewares/catchAsyncErrors")
@@ -12,13 +11,27 @@ const { CLIENT_URL } = require("../constants/appConstants");
 exports.registerPublisherUser = catchAsyncErrors(async (req, res, next) => {
     const {
         password,
-        confirmPassword
+        confirmPassword,
+        experience,
+        trafficsource,
+        volume,
+        referance,
+        networks
     } = req.body;
+
+    const questions = {
+        experience,
+        trafficsource,
+        volume,
+        referance,
+        networks
+    }
+    req.body.questions = questions
     if (password !== confirmPassword) {
         return next(new ErrorHandler('Passwords do not match', 400))
     }
-
-    const user = new publisherUser(req.body)
+    req.body.role = "publisher"
+    const user = new Users(req.body)
     req.body.user = user._id
 
     await Company.create(req.body)
@@ -30,13 +43,30 @@ exports.registerPublisherUser = catchAsyncErrors(async (req, res, next) => {
 exports.registerAdvertiserUser = catchAsyncErrors(async (req, res, next) => {
     const {
         password,
-        confirmPassword
+        confirmPassword,
+        productInfo,
+        countryofdelivery,
+        productionLine,
+        otherAffiliateplatforms
     } = req.body;
+
+    const questions = {
+        productInfo,
+        countryofdelivery,
+        productionLine,
+        otherAffiliateplatforms
+    }
+    req.body.questions = questions
 
     if (password !== confirmPassword) {
         return next(new ErrorHandler('Passwords do not match', 400))
     }
-    const user = await advertiserUser.create(req.body)
+    req.body.role = "advertiser"
+    const user = new Users(req.body)
+    req.body.user = user._id
+
+    await Company.create(req.body)
+    await user.save()
     sendToken(user, 200, res)
 })
 
@@ -48,8 +78,7 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler('Please enter email & password', 400))
     }
 
-    const user = await publisherUser.findOne({ email }).select('+password') ? await publisherUser.findOne({ email }).select('+password')
-        : await advertiserUser.findOne({ email }).select('+password')
+    const user = await Users.findOne({ email }).select('+password')
 
     if (!user) {
         return next(new ErrorHandler('Invalid Email or Password', 401));
@@ -67,13 +96,36 @@ exports.loginUser = catchAsyncErrors(async (req, res, next) => {
 
 // Update user profile   =>   /api/me/update
 exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
+    const {
+        firstname,
+        lastname,
+        nickname,
+        email,
+        contactnumber,
+        experience,
+        trafficsource,
+        volume,
+        referance,
+        networks
+    } = req.body
 
-    const updateuser = await User.findByIdAndUpdate(req.user.id, req.body, {
-        new: true,
-        runValidators: true,
-        useFindAndModify: false
-    })
 
+    const updateuser = await Users.findByIdAndUpdate(req.user.id,
+        firstname,
+        lastname,
+        nickname,
+        email,
+        contactnumber,
+        experience,
+        trafficsource,
+        volume,
+        referance,
+        networks
+        , {
+            new: true,
+            runValidators: true,
+            useFindAndModify: false
+        })
     res.status(200).json({
         success: true,
         updateuser
@@ -82,11 +134,12 @@ exports.updateProfile = catchAsyncErrors(async (req, res, next) => {
 
 // Update avatar profile   =>   /api/me/avatar
 exports.updateAvatar = catchAsyncErrors(async (req, res, next) => {
+
     if (!req.file) {
         next(new ErrorHandler("File upload failed", 501))
     }
     const newpath = req.file.path.slice(6)
-    const updateuser = await User.findByIdAndUpdate(req.user.id, { 'avatar.url': newpath }, {
+    const updateuser = await Users.findByIdAndUpdate(req.user.id, { 'avatar.url': newpath }, {
         new: true,
         runValidators: true,
         useFindAndModify: false
@@ -100,7 +153,8 @@ exports.updateAvatar = catchAsyncErrors(async (req, res, next) => {
 
 // Update remove avatar profile   =>   /api/me/avatar
 exports.removeAvatar = catchAsyncErrors(async (req, res, next) => {
-    const updateuser = await User.findByIdAndUpdate(req.user.id, { 'avatar.url': "" }, {
+
+    const updateuser = await Users.findByIdAndUpdate(req.user.id, { 'avatar.url': "" }, {
         new: true,
         runValidators: true,
         useFindAndModify: false
@@ -114,9 +168,7 @@ exports.removeAvatar = catchAsyncErrors(async (req, res, next) => {
 
 // Forgot Password   =>  /api/password/forgot
 exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
-    const user = await advertiserUser.findOne({ email: req.body.email }) ?
-        await advertiserUser.findOne({ email: req.body.email }) : await publisherUser.findOne({ email: req.body.email })
-
+    const user = await Users.findOne({ email: req.body.email })
 
     if (!user) {
         return next(new ErrorHandler('User not found with this email', 404));
@@ -161,18 +213,10 @@ exports.resetPassword = catchAsyncErrors(async (req, res, next) => {
     // Hash URL token
     const resetPasswordToken = crypto.createHash('sha256').update(req.params.token).digest('hex')
 
-    const user = await advertiserUser.findOne({
+    const user = await Users.findOne({
         resetPasswordToken,
         resetPasswordExpire: { $gt: Date.now() }
-    }) ?
-        await advertiserUser.findOne({
-            resetPasswordToken,
-            resetPasswordExpire: { $gt: Date.now() }
-        })
-        : await publisherUser.findOne({
-            resetPasswordToken,
-            resetPasswordExpire: { $gt: Date.now() }
-        })
+    })
 
     if (!user) {
         return next(new ErrorHandler('Password reset token is invalid or has been expired', 400))
@@ -215,9 +259,7 @@ exports.logout = catchAsyncErrors(async (req, res) => {
 // Get user => /api/me  //test
 exports.getUser = (async (req, res, next) => {
 
-    const user = await publisherUser.findById(req.user.id) ?
-        await publisherUser.findById(req.user.id) :
-        await advertiserUser.findById(req.user.id)
+    const user = await Users.findById(req.user.id)
 
     if (!user) {
         return next(new ErrorHandler("User not found", 404))
