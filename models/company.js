@@ -11,7 +11,8 @@ const companySchema = mongoose.Schema({
     },
     instantMessage: {
         type: String,
-        required: [true, 'Please enter instant Message'],
+        default: '',
+        // required: [true, 'Please enter instant Message'],
     },
     website: {
         type: String,

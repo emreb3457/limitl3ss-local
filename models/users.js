@@ -13,11 +13,11 @@ const userSchema = new mongoose.Schema({
     lastname: {
         type: String,
         required: [true, 'Please enter your last name'],
-        maxLength: [10, 'Your name cannot exceed 10 characters']
+        maxLength: [10, 'Your last name cannot exceed 10 characters']
     },
     nickname: {
         type: String,
-        maxLength: [20, 'Your name cannot exceed 20 characters']
+        maxLength: [20, 'Your nick name cannot exceed 20 characters']
     },
     email: {
         type: String,
@@ -28,7 +28,7 @@ const userSchema = new mongoose.Schema({
     contactnumber: {
         type: String,
         required: [true, 'Please enter your contact number'],
-        maxLength: [11, 'Your name cannot exceed 11 characters']
+        maxLength: [11, 'Contact number cannot exceed 11 characters']
     },
     password: {
         type: String,
